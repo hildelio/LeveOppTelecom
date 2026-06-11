@@ -1,0 +1,40 @@
+# ==============================================================
+# Docker Compose — Multi-Tenant Telecom
+# Leve Telecom → port 8080
+# OPP Telecom  → port 8081
+# ==============================================================
+
+services:
+  # ── Leve Telecom ───────────────────────────────────────────
+  leve:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TENANT: leve
+    container_name: telecom-leve
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ── OPP Telecom ────────────────────────────────────────────
+  opp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TENANT: opp
+    container_name: telecom-opp
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

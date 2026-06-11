@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+.env
+.env.*
+!.env.leve
+!.env.opp
+.vscode
+.idea
+*.log
+deploy.sh
