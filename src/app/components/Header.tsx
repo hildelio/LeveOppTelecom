@@ -4,6 +4,8 @@ import { useTenant } from "@/contexts/TenantContext";
 import { useLocation } from "@/contexts/LocationContext";
 import { useSegment } from "@/contexts/SegmentContext";
 import { useTranslation, type Lang } from "@/contexts/I18nContext";
+import brFlag from "../../imports/br.svg";
+import usFlag from "../../imports/us.svg";
 
 interface HeaderProps {
   onOpenModal?: () => void;
@@ -58,44 +60,55 @@ export function Header({ onOpenModal }: HeaderProps) {
     border: "none",
   };
 
-  // ── Language button style ───────────────────────────────────
-  const langBtnStyle = (active: boolean): React.CSSProperties => ({
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "4px",
-    fontFamily: "'Inter',sans-serif",
-    fontSize: "12px",
-    fontWeight: 600,
-    padding: "5px 10px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    transition: "all 0.2s ease",
-    border: active
-      ? `1.5px solid rgba(${colors.primaryRgb}, 0.5)`
-      : "1.5px solid rgba(255,255,255,0.1)",
-    background: active
-      ? `rgba(${colors.primaryRgb}, 0.12)`
-      : "transparent",
-    color: active ? colors.primary : colors.textMuted,
-  });
-
-  const langButtons = (
-    <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+  const langToggle = (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        background: `rgba(255,255,255,0.06)`,
+        border: `1px solid rgba(255,255,255,0.1)`,
+        borderRadius: "100px",
+        padding: "3px",
+      }}
+    >
       {([
-        { code: "pt" as Lang, flag: "🇧🇷", label: "PT" },
-        { code: "en" as Lang, flag: "🇺🇸", label: "EN" },
-      ]).map(({ code, flag, label }) => (
-        <button
-          key={code}
-          onClick={() => setLang(code)}
-          style={langBtnStyle(lang === code)}
-          title={code === "pt" ? "Português" : "English"}
-        >
-          <span style={{ fontSize: "14px", lineHeight: 1 }}>{flag}</span>
-          {label}
-        </button>
-      ))}
+        { code: "pt" as Lang, flagSrc: brFlag, ariaLabel: "Mudar para Português" },
+        { code: "en" as Lang, flagSrc: usFlag, ariaLabel: "Switch to English" },
+      ]).map(({ code, flagSrc, ariaLabel }) => {
+        const active = lang === code;
+        return (
+          <button
+            key={code}
+            onClick={() => setLang(code)}
+            aria-label={ariaLabel}
+            title={ariaLabel}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "6px",
+              borderRadius: "100px",
+              background: active ? `rgba(${colors.primaryRgb}, 0.2)` : "transparent",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <img 
+              src={flagSrc} 
+              alt={ariaLabel} 
+              style={{ 
+                width: "20px", 
+                height: "auto", 
+                objectFit: "cover", 
+                borderRadius: "2px",
+                opacity: active ? 1 : 0.45, 
+                filter: active ? "drop-shadow(0 0 4px rgba(255,255,255,0.2))" : "grayscale(50%)" 
+              }} 
+            />
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -207,13 +220,11 @@ export function Header({ onOpenModal }: HeaderProps) {
           ))}
         </nav>
 
-        {/* ── Right cluster: Lang + Segment toggle + CTA ─────────────── */}
+        {/* ── Right cluster: Segment toggle + CTA + Lang ─────────────── */}
         <div
           style={{ display: "flex", alignItems: "center", gap: "12px" }}
           className="hidden md:flex"
         >
-          {/* Language switcher */}
-          {langButtons}
 
           {/* B2C / B2B Toggle */}
           <div
@@ -300,6 +311,11 @@ export function Header({ onOpenModal }: HeaderProps) {
           >
             {t.nav.clientArea}
           </button>
+
+          {/* Language switcher */}
+          <div style={{ marginLeft: "4px" }}>
+            {langToggle}
+          </div>
         </div>
 
         {/* ── Mobile hamburger ────────────────────────────────── */}
@@ -329,7 +345,7 @@ export function Header({ onOpenModal }: HeaderProps) {
         >
           {/* Language switcher — mobile */}
           <div style={{ marginBottom: "12px", display: "flex", justifyContent: "center" }}>
-            {langButtons}
+            {langToggle}
           </div>
 
           {/* City selector — mobile */}
