@@ -3,12 +3,14 @@ import { motion } from "motion/react";
 import { Gauge, ExternalLink, Zap } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
 import speedometerImg from "../../imports/c27fe2fb-8dcb-44e6-bc36-b7490af0b8c0.png";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export function SpeedTest() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
   const { colors } = useTenant();
+  const { t } = useTranslation();
 
   function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = cardRef.current;
@@ -47,14 +49,14 @@ export function SpeedTest() {
           }}>
             <Gauge size={12} color={colors.primary} />
             <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: colors.primary, textTransform: "uppercase", letterSpacing: "1px" }}>
-              Velocidade
+              {t.speedTest.badge}
             </span>
           </div>
           <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, color: colors.textPrimary, letterSpacing: "-1.5px", marginBottom: "14px" }}>
-            Teste a velocidade da{" "}<span style={{ color: colors.primary }}>sua conexão</span>
+            {t.speedTest.titleBefore}{" "}<span style={{ color: colors.primary }}>{t.speedTest.titleHighlight}</span>
           </h2>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", color: colors.textSecondary, maxWidth: "460px", margin: "0 auto", lineHeight: 1.6 }}>
-            Confirme em tempo real se você está recebendo a velocidade contratada. Powered by nPerf.
+            {t.speedTest.paragraph}
           </p>
         </motion.div>
 
@@ -111,16 +113,16 @@ export function SpeedTest() {
                       </span>
                     </div>
 
-                    <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: "26px", fontWeight: 800, color: colors.textPrimary, letterSpacing: "-0.8px", lineHeight: 1.2, marginBottom: "12px" }}>
-                      Sua internet<br />na velocidade certa
+                    <h3 style={{ fontFamily: "'Inter',sans-serif", fontSize: "26px", fontWeight: 800, color: colors.textPrimary, letterSpacing: "-0.8px", lineHeight: 1.2, marginBottom: "12px", whiteSpace: "pre-line" }}>
+                      {t.speedTest.cardTitle}
                     </h3>
                     <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: colors.textSecondary, lineHeight: 1.7, marginBottom: "24px" }}>
-                      Clique abaixo para iniciar o teste e confirmar que você está recebendo os Megabits contratados.
+                      {t.speedTest.cardText}
                     </p>
 
                     {/* Stats */}
                     <div style={{ display: "flex", gap: "20px", marginBottom: "28px", flexWrap: "wrap" }}>
-                      {[{ l: "Download", v: "300 Mb/s" }, { l: "Upload", v: "150 Mb/s" }, { l: "Ping", v: "< 10ms" }].map((s) => (
+                      {[{ l: t.speedTest.metrics.download, v: "300 Mb/s" }, { l: t.speedTest.metrics.upload, v: "150 Mb/s" }, { l: t.speedTest.metrics.ping, v: "< 10ms" }].map((s) => (
                         <div key={s.l}>
                           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", fontWeight: 800, color: colors.primary }}>{s.v}</div>
                           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: colors.textMuted, marginTop: "2px" }}>{s.l}</div>
@@ -142,14 +144,14 @@ export function SpeedTest() {
                       onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 44px rgba(${colors.primaryRgb},0.65)`; (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 24px rgba(${colors.primaryRgb},0.4)`; (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; }}
                     >
-                      Testar Agora <ExternalLink size={14} />
+                      {t.speedTest.testNow} <ExternalLink size={14} />
                     </a>
 
                     {/* 3D hint badge */}
                     <div style={{ marginTop: "16px", display: "inline-flex", alignItems: "center", gap: "6px", background: `rgba(${colors.primaryRgb},0.04)`, border: `1px dashed rgba(${colors.primaryRgb},0.22)`, borderRadius: "8px", padding: "5px 10px" }}>
                       <span style={{ fontSize: "10px", color: colors.primary }}>✦</span>
                       <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: `rgba(${colors.primaryRgb},0.55)`, fontStyle: "italic" }}>
-                        3D tilt on hover — move cursor across card
+                        {t.speedTest.hint}
                       </span>
                     </div>
                   </div>

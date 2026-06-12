@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TenantProvider, useTenant } from "@/contexts/TenantContext";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { SegmentProvider } from "@/contexts/SegmentContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Pricing } from "./components/Pricing";
@@ -56,7 +57,9 @@ export default function App() {
     <TenantProvider>
       <LocationProvider>
         <SegmentProvider>
-          <AppShell />
+          <I18nProvider>
+            <AppShell />
+          </I18nProvider>
         </SegmentProvider>
       </LocationProvider>
     </TenantProvider>

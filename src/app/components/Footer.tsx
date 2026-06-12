@@ -1,17 +1,18 @@
 import { MessageCircle, Mail, Instagram, Facebook, Youtube } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
-const supportLinks = ["Política de Privacidade", "Termos de Uso", "Ouvidoria", "Trabalhe Conosco"];
 const socials = [{ Icon: Instagram, label: "Instagram" }, { Icon: Facebook, label: "Facebook" }, { Icon: Youtube, label: "YouTube" }];
 
 export function Footer() {
   const { config, colors } = useTenant();
+  const { t } = useTranslation();
 
   const quickLinks = [
-    { label: "Home", id: "home" },
-    { label: "Planos", id: "planos" },
-    { label: `${config.brandName} TV`, id: "levetv" },
-    { label: "Contato", id: "contato" }
+    { label: t.nav.home, id: "home" },
+    { label: t.nav.plans, id: "planos" },
+    { label: `${config.brandName} ${t.nav.tv}`, id: "levetv" },
+    { label: t.nav.contact, id: "contato" }
   ];
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -38,13 +39,13 @@ export function Footer() {
           <div>
             <img src={config.assets.logoPath} alt={config.brandName} style={{ height: "64px", width: "auto", objectFit: "contain", marginBottom: "16px", filter: `drop-shadow(0 0 8px ${colors.borderGlow})`, display: "block" }} />
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: colors.textSecondary, lineHeight: 1.8, maxWidth: "220px" }}>
-              {config.brandTagline} Velocidade real e suporte humano.
+              {t.footer.slogan}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>Links Rápidos</h4>
+            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>{t.footer.quickLinks}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {quickLinks.map((link) => (
                 <li key={link.id} style={{ marginBottom: "10px" }}>
@@ -58,9 +59,9 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>Suporte & Legal</h4>
+            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>{t.footer.supportLegal}</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {supportLinks.map((l) => (
+              {t.footer.legalLinks.map((l) => (
                 <li key={l} style={{ marginBottom: "10px" }}>
                   <a href="#" style={{ fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.44)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.color = colors.primary)}
@@ -72,7 +73,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>Contato</h4>
+            <h4 style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: "1.5px", marginBottom: "20px" }}>{t.footer.contactTitle}</h4>
             <a href={`https://api.whatsapp.com/send?phone=${config.contact.whatsappNumber}&text=${encodeURIComponent(config.contact.whatsappMessage)}`} target="_blank" rel="noopener noreferrer"
               style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "'Inter',sans-serif", fontSize: "14px", color: "rgba(255,255,255,0.48)", textDecoration: "none", marginBottom: "12px", transition: "color 0.2s" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = colors.primary)}
@@ -99,7 +100,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
-          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.28)" }}>© {new Date().getFullYear()} {config.brandName}. Todos os direitos reservados.</p>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.28)" }}>© {new Date().getFullYear()} {config.brandName}. {t.footer.copyright}</p>
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.28)" }}>CNPJ: {config.contact.cnpj}</p>
         </div>
       </div>

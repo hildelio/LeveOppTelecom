@@ -4,11 +4,13 @@ import appStoreImg   from "../../imports/6f173690-25c6-42fe-911f-759e8cd952c4.pn
 import googlePlayImg from "../../imports/27819495-1841-47f6-95ea-6c0baba08bdd.png";
 import promoVideo    from "../../imports/Leve_Telecom_Provedor_de_internet__1_-2.mp4";
 import { useTenant } from "@/contexts/TenantContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
 const channels = ["Globo", "SBT", "Record", "Band", "ESPN", "Cartoon Network", "Discovery", "National Geographic"];
 
 export function LeveTV() {
   const { config, colors } = useTenant();
+  const { t } = useTranslation();
 
   return (
     <section id="levetv" style={{ background: colors.bgDeep, padding: "100px 24px", position: "relative", overflow: "hidden" }}>
@@ -23,15 +25,15 @@ export function LeveTV() {
           {/* Tag */}
           <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: `rgba(${colors.primaryRgb},0.08)`, border: `1px solid rgba(${colors.primaryRgb},0.2)`, borderRadius: "100px", padding: "5px 14px", marginBottom: "20px" }}>
             <Tv size={12} color={colors.primary} />
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: colors.primary, textTransform: "uppercase", letterSpacing: "1px" }}>Entretenimento</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: colors.primary, textTransform: "uppercase", letterSpacing: "1px" }}>{t.leveTv.badge}</span>
           </div>
 
           <h2 style={{ fontFamily: "'Inter',sans-serif", fontSize: "clamp(28px,3.5vw,46px)", fontWeight: 800, color: colors.textPrimary, letterSpacing: "-1.5px", lineHeight: 1.15, marginBottom: "18px" }}>
-            Filmes, Séries e{" "}<span style={{ color: colors.primary }}>Canais ao Vivo</span>
+            {t.leveTv.titleBefore}{" "}<span style={{ color: colors.primary }}>{t.leveTv.titleHighlight}</span>
           </h2>
 
           <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "15px", color: colors.textSecondary, lineHeight: 1.8, marginBottom: "24px", maxWidth: "460px" }}>
-            Com o pacote {config.brandName} TV você tem acesso a dezenas de canais ao vivo, filmes, séries e conteúdo esportivo — tudo incluso no seu plano.
+            {t.leveTv.paragraph1}{config.brandName}{t.leveTv.paragraph2}
           </p>
 
           {/* Channel chips */}
@@ -39,24 +41,24 @@ export function LeveTV() {
             {channels.map((ch) => (
               <span key={ch} style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 500, color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.09)", borderRadius: "6px", padding: "4px 10px" }}>{ch}</span>
             ))}
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 500, color: colors.primary, background: `rgba(${colors.primaryRgb},0.06)`, border: `1px solid rgba(${colors.primaryRgb},0.2)`, borderRadius: "6px", padding: "4px 10px" }}>+200 canais</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 500, color: colors.primary, background: `rgba(${colors.primaryRgb},0.06)`, border: `1px solid rgba(${colors.primaryRgb},0.2)`, borderRadius: "6px", padding: "4px 10px" }}>{t.leveTv.channelsText}</span>
           </div>
 
           {/* Stars */}
           <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "32px" }}>
             {[1,2,3,4,5].map((n) => <Star key={n} size={13} color={colors.primary} fill={colors.primary} />)}
-            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.45)", marginLeft: "4px" }}>4.9/5 · 2.400+ avaliações</span>
+            <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "13px", color: "rgba(255,255,255,0.45)", marginLeft: "4px" }}>{t.leveTv.ratingText}</span>
           </div>
 
           {/* App Store Badges */}
           <div>
             <p style={{ fontFamily: "'Inter',sans-serif", fontSize: "12px", fontWeight: 600, color: "rgba(255,255,255,0.36)", textTransform: "uppercase", letterSpacing: "1.2px", marginBottom: "12px" }}>
-              Baixe nosso app
+              {t.leveTv.downloadApp}
             </p>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
               {[
-                { src: googlePlayImg, alt: "Disponível no Google Play",  href: "https://play.google.com/store" },
-                { src: appStoreImg,   alt: "Disponível na App Store",    href: "https://apps.apple.com" },
+                { src: googlePlayImg, alt: t.leveTv.availableOnPlay,  href: "https://play.google.com/store" },
+                { src: appStoreImg,   alt: t.leveTv.availableOnApple,    href: "https://apps.apple.com" },
               ].map(({ src, alt, href }) => (
                 <a key={alt} href={href} target="_blank" rel="noopener noreferrer"
                   style={{ display: "block", borderRadius: "8px", overflow: "hidden", transition: "transform 0.22s ease, filter 0.22s ease" }}

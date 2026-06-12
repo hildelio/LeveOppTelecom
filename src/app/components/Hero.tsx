@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface HeroProps {
   onOpenModal?: () => void;
@@ -8,6 +9,7 @@ interface HeroProps {
 
 export function Hero({ onOpenModal }: HeroProps) {
   const { config, colors } = useTenant();
+  const { t } = useTranslation();
 
   const handleScrollToPlanos = () => {
     const element = document.getElementById("planos");
@@ -108,16 +110,16 @@ export function Hero({ onOpenModal }: HeroProps) {
               letterSpacing: "-2px",
             }}
           >
-              {" "}
+              {t.hero.headlineBefore}
             <span
               style={{
                 color: colors.primary,
                 textShadow: `0 0 30px rgba(${colors.primaryRgb},0.5)`,
               }}
             >
-              Ultravelocidade
+              {t.hero.headlineHighlight}
             </span>{" "}
-            para sua casa
+            {t.hero.headlineAfter}
           </h1>
 
           {/* Subtext */}
@@ -132,8 +134,7 @@ export function Hero({ onOpenModal }: HeroProps) {
               maxWidth: "520px",
             }}
           >
-            {config.brandTagline}. Conexão de fibra óptica estável e ultra-rápida. Streaming, jogos e
-            trabalho remoto sem travamentos. Qualidade que você merece.
+            {t.hero.slogan} {t.hero.subtext}
           </p>
 
           {/* CTAs */}
@@ -165,7 +166,7 @@ export function Hero({ onOpenModal }: HeroProps) {
               }}
               onClick={onOpenModal}
             >
-              Assine Já
+              {t.hero.ctaPrimary}
             </button>
             <button
               style={{
@@ -193,7 +194,7 @@ export function Hero({ onOpenModal }: HeroProps) {
               }}
               onClick={handleScrollToPlanos}
             >
-              Ver Planos
+              {t.hero.ctaSecondary}
             </button>
           </div>
 
@@ -209,11 +210,7 @@ export function Hero({ onOpenModal }: HeroProps) {
               flexWrap: "wrap",
             }}
           >
-            {[
-              { value: "300+", label: "Mbps de velocidade" },
-              { value: "99.9%", label: "Uptime garantido" },
-              { value: "24h", label: "Suporte técnico" },
-            ].map((stat) => (
+            {t.hero.stats.map((stat) => (
               <div key={stat.label}>
                 <div
                   style={{
@@ -269,7 +266,7 @@ export function Hero({ onOpenModal }: HeroProps) {
             letterSpacing: "2px",
           }}
         >
-          Scroll
+          {t.hero.scroll}
         </span>
         <ChevronDown size={18} color={colors.textSecondary} />
       </motion.div>

@@ -1,40 +1,14 @@
 import { motion } from "motion/react";
 import { Zap, Headphones, Wifi, Clock } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export function Features() {
   const { config, colors } = useTenant();
+  const { t } = useTranslation();
 
-  const features = [
-    {
-      icon: Zap,
-      title: "Fibra Óptica",
-      description:
-        "Tecnologia de ponta com cabos de fibra óptica para máxima estabilidade e velocidade real até sua porta.",
-      color: colors.primary,
-    },
-    {
-      icon: Headphones,
-      title: "Suporte 24h",
-      description:
-        "Equipe técnica disponível 24 horas por dia, 7 dias por semana para resolver qualquer problema.",
-      color: colors.secondary,
-    },
-    {
-      icon: Wifi,
-      title: "Wi-Fi Grátis",
-      description:
-        "Roteador dual-band de última geração incluso na instalação, sem custo adicional.",
-      color: colors.primary,
-    },
-    {
-      icon: Clock,
-      title: "Instalação Rápida",
-      description:
-        "Agendamento em até 24h e instalação em menos de 2 horas por nossos técnicos certificados.",
-      color: colors.secondary,
-    },
-  ];
+  const icons = [Zap, Headphones, Wifi, Clock];
+  const colorPattern = [colors.primary, colors.secondary, colors.primary, colors.secondary];
 
   return (
     <section
@@ -75,8 +49,9 @@ export function Features() {
               marginBottom: "16px",
             }}
           >
-            Por que escolher a{" "}
-            <span style={{ color: colors.primary }}>{config.brandName}</span>?
+            {t.features.titleBefore}{" "}
+            <span style={{ color: colors.primary }}>{config.brandName}</span>
+            {t.features.titleAfter}
           </h2>
           <p
             style={{
@@ -87,8 +62,7 @@ export function Features() {
               margin: "0 auto",
             }}
           >
-            Infraestrutura moderna, atendimento humanizado e compromisso com a
-            sua conexão.
+            {t.features.subtitle}
           </p>
         </motion.div>
 
@@ -100,12 +74,10 @@ export function Features() {
             gap: "20px",
           }}
         >
-          {features.map((feat, i) => {
-            const Icon = feat.icon;
-            // The hover colors require HEX -> rgba conversion, which is tricky in inline styles
-            // But we have rgb in colors.primaryRgb / secondaryRgb. Let's just use CSS opacity or the RGB values.
-            // A simple trick is using box-shadow and border colors directly.
-            const featColorRgb = feat.color === colors.primary ? colors.primaryRgb : colors.secondaryRgb;
+          {t.features.items.map((feat, i) => {
+            const Icon = icons[i];
+            const featColor = colorPattern[i];
+            const featColorRgb = featColor === colors.primary ? colors.primaryRgb : colors.secondaryRgb;
 
             return (
               <motion.div
@@ -156,7 +128,7 @@ export function Features() {
                   <Icon
                     size={24}
                     style={{
-                      color: feat.color,
+                      color: featColor,
                       filter: `drop-shadow(0 0 6px rgba(${featColorRgb},0.5))`,
                     }}
                   />

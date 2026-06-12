@@ -5,6 +5,7 @@ import { Check, Zap, ChevronLeft, ChevronRight, MapPin, Building2, User } from "
 import { useTenant } from "@/contexts/TenantContext";
 import { useLocation } from "@/contexts/LocationContext";
 import { useSegment } from "@/contexts/SegmentContext";
+import { useTranslation } from "@/contexts/I18nContext";
 import { getPlans } from "@/data/plans";
 
 interface PricingProps {
@@ -15,6 +16,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
   const { colors } = useTenant();
   const { city, detecting } = useLocation();
   const { segment, isB2B } = useSegment();
+  const { t } = useTranslation();
 
   // ── Reactive plan list ────────────────────────────────────
   const plans = useMemo(() => getPlans(city, segment), [city, segment]);
@@ -61,7 +63,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
 
   // ── Subtitle text ─────────────────────────────────────────
   const subtitleText = detecting
-    ? "Buscando os melhores planos para a sua região..."
+    ? t.pricing.subtitleDetecting
     : isB2B
       ? `Links dedicados com SLA para empresas em ${city}.`
       : `Planos de fibra óptica para todos os perfis em ${city}. Sem fidelidade.`;
@@ -122,7 +124,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                 letterSpacing: "1px",
               }}
             >
-              {isB2B ? "Empresas" : "Planos"}
+              {isB2B ? t.pricing.badgeB2B : t.pricing.badgeB2C}
             </span>
           </div>
 
@@ -136,7 +138,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
               marginBottom: "14px",
             }}
           >
-            {isB2B ? "Soluções Corporativas" : "Escolha a sua velocidade"}
+            {isB2B ? t.pricing.sectionTitleB2B : t.pricing.sectionTitle}
           </h2>
 
           <p
@@ -178,7 +180,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
               }}
             >
               <MapPin size={11} />
-              {detecting ? "Localizando..." : city}
+              {detecting ? t.pricing.locating : city}
             </div>
             <div
               style={{
@@ -196,7 +198,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
               }}
             >
               {isB2B ? <Building2 size={11} /> : <User size={11} />}
-              {isB2B ? "Empresas" : "Para Você"}
+              {isB2B ? t.nav.business : t.nav.forYou}
             </div>
           </div>
         </motion.div>
@@ -368,7 +370,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {plan.badge}
+                      {t.plans.badges[plan.badge] || plan.badge}
                     </div>
                   )}
 
@@ -395,7 +397,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                       marginBottom: "18px",
                     }}
                   >
-                    {plan.description}
+                    {t.plans.descriptions[plan.description] || plan.description}
                   </div>
 
                   <div
@@ -437,7 +439,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                         marginBottom: "6px",
                       }}
                     >
-                      {plan.period}
+                      {t.plans.period[plan.period] || plan.period}
                     </span>
                   </div>
 
@@ -495,7 +497,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                             color: "rgba(255,255,255,0.68)",
                           }}
                         >
-                          {f}
+                          {t.plans.features[f] || f}
                         </span>
                       </li>
                     ))}
@@ -548,7 +550,7 @@ export function Pricing({ onOpenModal }: PricingProps) {
                       }
                     }}
                   >
-                    {plan.cta}
+                    {t.plans.cta[plan.cta] || plan.cta}
                   </button>
                 </div>
               )))}

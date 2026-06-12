@@ -3,6 +3,7 @@ import { Menu, X, MapPin, Building2, User } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
 import { useLocation } from "@/contexts/LocationContext";
 import { useSegment } from "@/contexts/SegmentContext";
+import { useTranslation, type Lang } from "@/contexts/I18nContext";
 
 interface HeaderProps {
   onOpenModal?: () => void;
@@ -14,6 +15,7 @@ export function Header({ onOpenModal }: HeaderProps) {
   const { config, colors } = useTenant();
   const { city, openModal: openLocationModal, detecting } = useLocation();
   const { segment, toggle: toggleSegment, isB2B } = useSegment();
+  const { t, lang, setLang } = useTranslation();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -22,10 +24,10 @@ export function Header({ onOpenModal }: HeaderProps) {
   }, []);
 
   const navLinks = [
-    { label: "Home", id: "home" },
-    { label: "Planos", id: "planos" },
-    { label: `${config.brandName} TV`, id: "levetv" },
-    { label: "Contato", id: "contato" },
+    { label: t.nav.home, id: "home" },
+    { label: t.nav.plans, id: "planos" },
+    { label: `${config.brandName} ${t.nav.tv}`, id: "levetv" },
+    { label: t.nav.contact, id: "contato" },
   ];
 
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -55,6 +57,47 @@ export function Header({ onOpenModal }: HeaderProps) {
     transition: "all 0.2s ease",
     border: "none",
   };
+
+  // ── Language button style ───────────────────────────────────
+  const langBtnStyle = (active: boolean): React.CSSProperties => ({
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "4px",
+    fontFamily: "'Inter',sans-serif",
+    fontSize: "12px",
+    fontWeight: 600,
+    padding: "5px 10px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+    border: active
+      ? `1.5px solid rgba(${colors.primaryRgb}, 0.5)`
+      : "1.5px solid rgba(255,255,255,0.1)",
+    background: active
+      ? `rgba(${colors.primaryRgb}, 0.12)`
+      : "transparent",
+    color: active ? colors.primary : colors.textMuted,
+  });
+
+  const langButtons = (
+    <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+      {([
+        { code: "pt" as Lang, flag: "🇧🇷", label: "PT" },
+        { code: "en" as Lang, flag: "🇺🇸", label: "EN" },
+      ]).map(({ code, flag, label }) => (
+        <button
+          key={code}
+          onClick={() => setLang(code)}
+          style={langBtnStyle(lang === code)}
+          title={code === "pt" ? "Português" : "English"}
+        >
+          <span style={{ fontSize: "14px", lineHeight: 1 }}>{flag}</span>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <header
@@ -101,7 +144,7 @@ export function Header({ onOpenModal }: HeaderProps) {
           <button
             onClick={openLocationModal}
             className="hidden md:flex"
-            title="Alterar cidade"
+            title={t.nav.changeCity}
             disabled={detecting}
             style={{
               ...pillStyle,
@@ -164,11 +207,14 @@ export function Header({ onOpenModal }: HeaderProps) {
           ))}
         </nav>
 
-        {/* ── Right cluster: Segment toggle + CTA ─────────────── */}
+        {/* ── Right cluster: Lang + Segment toggle + CTA ─────────────── */}
         <div
           style={{ display: "flex", alignItems: "center", gap: "12px" }}
           className="hidden md:flex"
         >
+          {/* Language switcher */}
+          {langButtons}
+
           {/* B2C / B2B Toggle */}
           <div
             style={{
@@ -208,7 +254,7 @@ export function Header({ onOpenModal }: HeaderProps) {
               }}
             >
               <User size={12} />
-              Para Você
+              {t.nav.forYou}
             </button>
 
             <button
@@ -223,7 +269,7 @@ export function Header({ onOpenModal }: HeaderProps) {
               }}
             >
               <Building2 size={12} />
-              Empresas
+              {t.nav.business}
             </button>
           </div>
 
@@ -252,7 +298,7 @@ export function Header({ onOpenModal }: HeaderProps) {
               (e.target as HTMLButtonElement).style.boxShadow = `0 0 12px rgba(${colors.primaryRgb}, 0.1)`;
             }}
           >
-            Área do Cliente
+            {t.nav.clientArea}
           </button>
         </div>
 
@@ -281,6 +327,11 @@ export function Header({ onOpenModal }: HeaderProps) {
             padding: "16px 24px 24px",
           }}
         >
+          {/* Language switcher — mobile */}
+          <div style={{ marginBottom: "12px", display: "flex", justifyContent: "center" }}>
+            {langButtons}
+          </div>
+
           {/* City selector — mobile */}
           <button
             onClick={() => {
@@ -317,7 +368,7 @@ export function Header({ onOpenModal }: HeaderProps) {
                     color: colors.textMuted,
                   }}
                 >
-                  detectando...
+                  {t.nav.detecting}
                 </span>
               </div>
             ) : (
@@ -331,7 +382,7 @@ export function Header({ onOpenModal }: HeaderProps) {
                     color: colors.textMuted,
                   }}
                 >
-                  alterar
+                  {t.nav.changeCity}
                 </span>
               </>
             )}
@@ -371,7 +422,7 @@ export function Header({ onOpenModal }: HeaderProps) {
                 transition: "all 0.2s ease",
               }}
             >
-              <User size={13} /> Para Você
+              <User size={13} /> {t.nav.forYou}
             </button>
             <button
               onClick={() => {
@@ -397,7 +448,7 @@ export function Header({ onOpenModal }: HeaderProps) {
                 transition: "all 0.2s ease",
               }}
             >
-              <Building2 size={13} /> Empresas
+              <Building2 size={13} /> {t.nav.business}
             </button>
           </div>
 
@@ -440,7 +491,7 @@ export function Header({ onOpenModal }: HeaderProps) {
               cursor: "pointer",
             }}
           >
-            Área do Cliente
+            {t.nav.clientArea}
           </button>
         </div>
       )}

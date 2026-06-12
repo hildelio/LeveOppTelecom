@@ -118,58 +118,68 @@ export function LocationProvider({ children }: { children: ReactNode }) {
 
     const controller = new AbortController();
     const timeout = setTimeout(() => {
-      console.warn("[LocationContext] ⏱ Fetch timeout (8s) — aborting.");
+      console.warn("[LocationContext] ⏱ Fetch timeout (4s) — aborting.");
       controller.abort();
-    }, 8000);
+    }, 4000);
 
     (async () => {
       try {
-        const res = await fetch("https://ipapi.co/json/", {
-          signal: controller.signal,
-        });
+        let detectedCity: string | null = null;
+
+        if (import.meta.env.DEV) {
+          console.log("[LocationContext] Em ambiente DEV: Mockando geolocalização para 'Salvador'...");
+          await new Promise((resolve) => setTimeout(resolve, 600));
+          detectedCity = "Salvador";
+        } else {
+          console.log("[LocationContext] Fetching location from ipwho.is...");
+          const res = await fetch("https://ipwho.is/", {
+            signal: controller.signal,
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          
+          const data = await res.json();
+          
+          // ipwho.is returns a 'success' boolean flag indicating if the lookup worked
+          if (data.success === false) {
+             throw new Error(data.message || "API returned success: false");
+          }
+
+          detectedCity = data.city;
+        }
+
         clearTimeout(timeout);
+        console.log(`[LocationContext] Success from ipwho.is:`, detectedCity);
 
-        console.log("[LocationContext] ipapi.co HTTP", res.status);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const data = await res.json();
-        console.log("[LocationContext] ipapi.co payload:", {
-          city: data.city,
-          region: data.region,
-          country: data.country_name,
-          ip: data.ip,
-        });
-
-        const match = matchCity(data.city);
+        const match = matchCity(detectedCity);
 
         if (match) {
           console.log("[LocationContext] ✅ Matched:", match);
           setCityState(match);
           localStorage.setItem(STORAGE_KEY, match);
           setDetecting(false);
-          // Open modal so user can CONFIRM (not just silently set)
+          // Open modal so user can CONFIRM
           setModalOpen(true);
         } else {
-          // City not supported → fallback + force user to choose
           console.warn(
-            `[LocationContext] ⚠ "${data.city}" not supported. ` +
-            `Supported: ${SUPPORTED_CITIES.join(", ")}. Fallback: ${FALLBACK_CITY}`
+            `[LocationContext] ⚠ "${detectedCity || "Unknown"}" not supported. Fallback: ${FALLBACK_CITY}`
           );
           setCityState(FALLBACK_CITY);
           setDetecting(false);
-          setModalOpen(true); // ← User MUST choose
+          setModalOpen(true); // User MUST choose
         }
       } catch (err) {
         clearTimeout(timeout);
         if ((err as Error).name === "AbortError") {
-          console.warn("[LocationContext] ❌ Fetch aborted (timeout or unmount).");
-        } else {
-          console.error("[LocationContext] ❌ Fetch failed:", err);
+          console.log("[LocationContext] Fetch aborted by React Strict Mode or Timeout.");
+          return; // Stop silently
         }
-        // Error path → fallback + force user to choose
+
+        console.error("[LocationContext] ❌ IP provider failed:", err);
+
+        // Required state corrections to unblock UI
         setCityState(FALLBACK_CITY);
         setDetecting(false);
-        setModalOpen(true); // ← User MUST choose
+        setModalOpen(true); 
       }
     })();
 

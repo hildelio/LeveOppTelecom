@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export function WhatsAppButton() {
   const [popupOpen, setPopupOpen] = useState(false);
   const { config } = useTenant();
+  const { t } = useTranslation();
 
   const waUrl = `https://api.whatsapp.com/send?phone=${config.contact.whatsappNumber}&text=${encodeURIComponent(config.contact.whatsappMessage)}`;
 
@@ -83,7 +85,7 @@ export function WhatsAppButton() {
                   WhatsApp
                 </p>
                 <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "rgba(255,255,255,0.75)", margin: 0 }}>
-                  Online agora
+                  {t.whatsapp.onlineNow}
                 </p>
               </div>
             </div>
@@ -119,7 +121,7 @@ export function WhatsAppButton() {
               }}
             >
               <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#111", margin: 0, lineHeight: 1.5 }}>
-                👋 <strong>Oi!</strong> Boas-vindas à <strong>{config.brandName}</strong> – Provedor de internet
+                <span dangerouslySetInnerHTML={{ __html: t.whatsapp.greeting1 + config.brandName + t.whatsapp.greeting2 }} />
               </p>
             </div>
             <div
@@ -132,7 +134,7 @@ export function WhatsAppButton() {
               }}
             >
               <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "13px", color: "#111", margin: 0 }}>
-                Podemos te ajudar?
+                {t.whatsapp.help}
               </p>
             </div>
           </div>
@@ -160,7 +162,7 @@ export function WhatsAppButton() {
             onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "#1ebe5d")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "#25D366")}
           >
-            Abrir bate-papo
+            {t.whatsapp.openChat}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M2 21l1.65-5.96A9.9 9.9 0 012 10C2 4.48 6.48 0 12 0s10 4.48 10 10-4.48 10-10 10a9.9 9.9 0 01-5.04-1.35L2 21z" opacity=".8"/></svg>
           </a>
         </div>
@@ -185,7 +187,7 @@ export function WhatsAppButton() {
           alignItems: "center",
           justifyContent: "center",
         }}
-        aria-label="Falar no WhatsApp"
+        aria-label={t.whatsapp.ariaLabel}
       >
         <svg width="32" height="32" viewBox="0 0 24 24" fill="#fff">
           <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.12-1.34A9.93 9.93 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.16 14.07c-.22.62-1.27 1.15-1.75 1.22-.44.06-.99.09-1.6-.1-.37-.11-.84-.27-1.44-.53-2.53-1.1-4.18-3.65-4.31-3.82-.13-.17-1.06-1.41-1.06-2.69 0-1.28.67-1.91 1.04-2.17.22-.16.49-.2.65-.2.19 0 .38.01.54.02.18 0 .43-.07.67.51.25.6.85 2.07.92 2.22.08.15.13.33.03.53-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.3.76 1.25 1.64 2.03.86.78 1.59 1.02 1.89 1.14.3.12.48.1.65-.06.17-.16.73-.85.93-1.14.2-.29.4-.24.67-.15.27.09 1.72.81 2.02.96.3.15.49.22.56.34.07.12.07.69-.15 1.31z"/>

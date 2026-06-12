@@ -13,11 +13,13 @@
 import { MapPin, Loader2, Check } from "lucide-react";
 import { useTenant } from "@/contexts/TenantContext";
 import { useLocation, type City } from "@/contexts/LocationContext";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export function LocationModal() {
   const { colors, config } = useTenant();
   const { city, cities, setCity, isModalOpen, closeModal, detecting } =
     useLocation();
+  const { t } = useTranslation();
 
   if (!isModalOpen) return null;
 
@@ -44,7 +46,7 @@ export function LocationModal() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Selecionar cidade"
+        aria-label={detecting ? t.location.detectingTitle : t.location.selectTitle}
         style={{
           position: "fixed",
           zIndex: 910,
@@ -111,7 +113,7 @@ export function LocationModal() {
             marginBottom: "6px",
           }}
         >
-          {detecting ? "Detectando sua cidade…" : "Qual a sua cidade?"}
+          {detecting ? t.location.detectingTitle : t.location.selectTitle}
         </h2>
 
         {/* Subtitle */}
@@ -126,8 +128,8 @@ export function LocationModal() {
           }}
         >
           {detecting
-            ? `Estamos localizando você para exibir os planos da ${config.brandName} disponíveis na sua região.`
-            : "Selecione a cidade para vermos os planos disponíveis na sua região."}
+            ? t.location.detectingSubtitle
+            : t.location.selectSubtitle}
         </p>
 
         {/* City buttons */}
