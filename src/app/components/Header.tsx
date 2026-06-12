@@ -150,28 +150,33 @@ export function Header({ onOpenModal }: HeaderProps) {
     >
       <div
         style={{
-          maxWidth: "1280px",
+          maxWidth: "1536px",
           margin: "0 auto",
-          padding: "0 24px",
-          height: "72px",
+          padding: "0 32px",
+          height: "110px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
         }}
       >
         {/* ── Left cluster: Logo + City Badge ──────────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
           {/* Logo */}
-          <img
-            src={config.assets.logoPath}
-            alt={config.brandName}
-            style={{
-              height: "64px",
-              width: "auto",
-              objectFit: "contain",
-              filter: `drop-shadow(0 0 8px ${colors.borderGlow})`,
-            }}
-          />
+          <Link to="/">
+            <img
+              src={config.assets.logoPath}
+              alt={config.brandName}
+              style={{
+                height: "100px",
+                width: "auto",
+                objectFit: "contain",
+                filter: `drop-shadow(0 0 8px ${colors.borderGlow})`,
+                transition: "transform 0.2s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            />
+          </Link>
 
           {/* City badge — desktop only */}
           <button
@@ -208,7 +213,7 @@ export function Header({ onOpenModal }: HeaderProps) {
 
         {/* ── Center: Desktop nav ─────────────────────────────── */}
         <nav
-          style={{ display: "flex", alignItems: "center", gap: "4px" }}
+          style={{ display: "flex", alignItems: "center", gap: "12px" }}
           className="hidden md:flex"
         >
           {navLinks.map((link) => (
@@ -242,7 +247,7 @@ export function Header({ onOpenModal }: HeaderProps) {
 
         {/* ── Right cluster: Segment toggle + CTA + Lang ─────────────── */}
         <div
-          style={{ display: "flex", alignItems: "center", gap: "12px" }}
+          style={{ display: "flex", alignItems: "center", gap: "24px" }}
           className="hidden md:flex"
         >
 
