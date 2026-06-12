@@ -5,6 +5,7 @@ import googlePlayImg from "../../imports/27819495-1841-47f6-95ea-6c0baba08bdd.pn
 import promoVideo    from "../../imports/Leve_Telecom_Provedor_de_internet__1_-2.mp4";
 import { useTenant } from "@/contexts/TenantContext";
 import { useTranslation } from "@/contexts/I18nContext";
+import { Link } from "react-router";
 
 const channels = ["Globo", "SBT", "Record", "Band", "ESPN", "Cartoon Network", "Discovery", "National Geographic"];
 
@@ -70,6 +71,39 @@ export function LeveTV() {
               ))}
             </div>
           </div>
+
+          {/* CTA: See All Videos */}
+          <Link
+            to="/tv"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "14px",
+              fontWeight: 600,
+              color: colors.primary,
+              background: `rgba(${colors.primaryRgb}, 0.08)`,
+              border: `1.5px solid rgba(${colors.primaryRgb}, 0.35)`,
+              borderRadius: "10px",
+              padding: "12px 24px",
+              textDecoration: "none",
+              marginTop: "20px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.background = `rgba(${colors.primaryRgb}, 0.16)`;
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = `rgba(${colors.primaryRgb}, 0.6)`;
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 0 20px rgba(${colors.primaryRgb}, 0.15)`;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.background = `rgba(${colors.primaryRgb}, 0.08)`;
+              (e.currentTarget as HTMLAnchorElement).style.borderColor = `rgba(${colors.primaryRgb}, 0.35)`;
+              (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+            }}
+          >
+            {t.tvPage.seeAllVideos} →
+          </Link>
         </motion.div>
 
         {/* ── Right: Promo Video ── */}

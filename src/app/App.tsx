@@ -1,22 +1,23 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { TenantProvider, useTenant } from "@/contexts/TenantContext";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { SegmentProvider } from "@/contexts/SegmentContext";
 import { I18nProvider } from "@/contexts/I18nContext";
 import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { Pricing } from "./components/Pricing";
-import { LeveTV } from "./components/LeveTV";
-import { SpeedTest } from "./components/SpeedTest";
-import { Features } from "./components/Features";
 import { Footer } from "./components/Footer";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { SGPModal } from "./components/SGPModal";
 import { LocationModal } from "./components/LocationModal";
+import { HomePage } from "./pages/HomePage";
+import { TvPageSkeleton } from "./components/TvPageSkeleton";
+
+// ── Code-split: TvPage loaded only when /tv is visited ──────
+const TvPage = lazy(() => import("./pages/TvPage"));
 
 /**
- * Inner app shell that has access to all contexts.
- * Reads `colors.bgDeep` to set the page background dynamically.
+ * AppShell — Layout wrapper shared across all routes.
+ * Renders Header, Footer, modals, WhatsApp FAB and the active route content.
  */
 function AppShell() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,13 +33,23 @@ function AppShell() {
       }}
     >
       <Header onOpenModal={() => setModalOpen(true)} />
-      <Hero onOpenModal={() => setModalOpen(true)} />
-      <Pricing onOpenModal={() => setModalOpen(true)} />
-      <LeveTV />
-      <SpeedTest />
-      <Features />
-      <Footer />
 
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage onOpenModal={() => setModalOpen(true)} />}
+        />
+        <Route
+          path="/tv"
+          element={
+            <Suspense fallback={<TvPageSkeleton />}>
+              <TvPage />
+            </Suspense>
+          }
+        />
+      </Routes>
+
+      <Footer />
       <WhatsAppButton />
       <SGPModal open={modalOpen} onClose={() => setModalOpen(false)} />
       <LocationModal />
@@ -47,21 +58,25 @@ function AppShell() {
 }
 
 /**
- * Root component — wraps everything in the provider stack:
+ * Root component — wraps everything in the provider stack + BrowserRouter:
+ *   BrowserRouter  → SPA routing
  *   TenantProvider  → CSS custom properties + brand config
  *   LocationProvider → city detection + localStorage
  *   SegmentProvider  → B2C / B2B toggle
+ *   I18nProvider     → pt-BR / en-US
  */
 export default function App() {
   return (
-    <TenantProvider>
-      <LocationProvider>
-        <SegmentProvider>
-          <I18nProvider>
-            <AppShell />
-          </I18nProvider>
-        </SegmentProvider>
-      </LocationProvider>
-    </TenantProvider>
+    <BrowserRouter>
+      <TenantProvider>
+        <LocationProvider>
+          <SegmentProvider>
+            <I18nProvider>
+              <AppShell />
+            </I18nProvider>
+          </SegmentProvider>
+        </LocationProvider>
+      </TenantProvider>
+    </BrowserRouter>
   );
 }

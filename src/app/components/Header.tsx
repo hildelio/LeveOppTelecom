@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, MapPin, Building2, User } from "lucide-react";
+import { useNavigate, useLocation as useRouterLocation, Link } from "react-router";
 import { useTenant } from "@/contexts/TenantContext";
 import { useLocation } from "@/contexts/LocationContext";
 import { useSegment } from "@/contexts/SegmentContext";
@@ -18,6 +19,8 @@ export function Header({ onOpenModal }: HeaderProps) {
   const { city, openModal: openLocationModal, detecting } = useLocation();
   const { segment, toggle: toggleSegment, isB2B } = useSegment();
   const { t, lang, setLang } = useTranslation();
+  const navigate = useNavigate();
+  const routerLocation = useRouterLocation();
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 20);
@@ -35,6 +38,23 @@ export function Header({ onOpenModal }: HeaderProps) {
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     setMobileOpen(false);
+
+    // If we're not on the home page, navigate there first then scroll
+    if (routerLocation.pathname !== "/") {
+      navigate("/");
+      // Wait for DOM to render the home page sections
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          const headerOffset = 72;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.scrollY - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      }, 100);
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       const headerOffset = 72;

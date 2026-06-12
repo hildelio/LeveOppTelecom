@@ -79,6 +79,7 @@ export interface TenantConfig {
   contact: TenantContact;
   social: TenantSocial;
   seo: TenantSeo;
+  youtubeApiKey: string;
   crmUrl: string;
   crmEnabled: boolean;
 }
@@ -140,6 +141,9 @@ export const tenantConfig: TenantConfig = {
     description: import.meta.env.VITE_SEO_DESCRIPTION || "Planos de internet fibra óptica com velocidade real.",
     cnpj:        import.meta.env.VITE_CNPJ || "00.000.000/0001-00",
   },
+
+  // YouTube
+  youtubeApiKey: import.meta.env.VITE_YOUTUBE_API_KEY || "",
 
   // CRM
   crmUrl:     import.meta.env.VITE_CRM_URL || "",
