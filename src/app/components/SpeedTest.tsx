@@ -18,7 +18,8 @@ export function SpeedTest() {
     const r = el.getBoundingClientRect();
     const dx = (e.clientX - r.left - r.width  / 2) / (r.width  / 2);
     const dy = (e.clientY - r.top  - r.height / 2) / (r.height / 2);
-    setTilt({ x: dy * -13, y: dx * 13 });
+    // Amplitude maior (25 graus em vez de 13)
+    setTilt({ x: dy * -25, y: dx * 25 });
   }
 
   function onMouseLeave() { setTilt({ x: 0, y: 0 }); setHovered(false); }
@@ -75,7 +76,8 @@ export function SpeedTest() {
               style={{
                 transformStyle: "preserve-3d",
                 transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transition: hovered ? "transform 0.07s linear" : "transform 0.55s cubic-bezier(0.23,1,0.32,1)",
+                // Movimento mais lento e fluido (0.4s ease-out) em vez de instantâneo
+                transition: hovered ? "transform 0.4s ease-out" : "transform 0.55s cubic-bezier(0.23,1,0.32,1)",
                 borderRadius: "24px",
                 cursor: "default",
               }}
@@ -122,7 +124,7 @@ export function SpeedTest() {
 
                     {/* Stats */}
                     <div style={{ display: "flex", gap: "20px", marginBottom: "28px", flexWrap: "wrap" }}>
-                      {[{ l: t.speedTest.metrics.download, v: "300 Mb/s" }, { l: t.speedTest.metrics.upload, v: "150 Mb/s" }, { l: t.speedTest.metrics.ping, v: "< 10ms" }].map((s) => (
+                      {[{ l: t.speedTest.metrics.download, v: "1000 Mb/s" }, { l: t.speedTest.metrics.upload, v: "500 Mb/s" }, { l: t.speedTest.metrics.ping, v: "< 10ms" }].map((s) => (
                         <div key={s.l}>
                           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "16px", fontWeight: 800, color: colors.primary }}>{s.v}</div>
                           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: colors.textMuted, marginTop: "2px" }}>{s.l}</div>
@@ -146,14 +148,6 @@ export function SpeedTest() {
                     >
                       {t.speedTest.testNow} <ExternalLink size={14} />
                     </a>
-
-                    {/* 3D hint badge */}
-                    <div style={{ marginTop: "16px", display: "inline-flex", alignItems: "center", gap: "6px", background: `rgba(${colors.primaryRgb},0.04)`, border: `1px dashed rgba(${colors.primaryRgb},0.22)`, borderRadius: "8px", padding: "5px 10px" }}>
-                      <span style={{ fontSize: "10px", color: colors.primary }}>✦</span>
-                      <span style={{ fontFamily: "'Inter',sans-serif", fontSize: "11px", color: `rgba(${colors.primaryRgb},0.55)`, fontStyle: "italic" }}>
-                        {t.speedTest.hint}
-                      </span>
-                    </div>
                   </div>
                 </div>
               </div>
