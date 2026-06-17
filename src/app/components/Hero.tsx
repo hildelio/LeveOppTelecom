@@ -43,7 +43,6 @@ export function Hero({ onOpenModal }: HeroProps) {
         muted
         loop
         playsInline
-        poster={config.assets.heroPoster}
         style={{
           position: "absolute",
           inset: 0,
@@ -88,7 +87,7 @@ export function Hero({ onOpenModal }: HeroProps) {
           maxWidth: "1280px",
           margin: "0 auto",
           padding: "0 24px",
-          paddingTop: "72px", // Compensate for fixed header
+          paddingTop: "130px", // Compensate for fixed header height
           width: "100%",
         }}
       >

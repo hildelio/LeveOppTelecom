@@ -67,7 +67,6 @@ export function Header({ onOpenModal }: HeaderProps) {
   // ── Shared sub-component styles ─────────────────────────────
 
   const pillStyle: React.CSSProperties = {
-    display: "inline-flex",
     alignItems: "center",
     gap: "6px",
     fontFamily: "'Inter',sans-serif",
@@ -181,7 +180,7 @@ export function Header({ onOpenModal }: HeaderProps) {
           {/* City badge — desktop only */}
           <button
             onClick={openLocationModal}
-            className="hidden md:flex"
+            className="hidden md:inline-flex"
             title={t.nav.changeCity}
             disabled={detecting}
             style={{
@@ -213,7 +212,7 @@ export function Header({ onOpenModal }: HeaderProps) {
 
         {/* ── Center: Desktop nav ─────────────────────────────── */}
         <nav
-          style={{ display: "flex", alignItems: "center", gap: "12px" }}
+          style={{ alignItems: "center", gap: "12px" }}
           className="hidden md:flex"
         >
           {navLinks.map((link) => (
@@ -247,7 +246,7 @@ export function Header({ onOpenModal }: HeaderProps) {
 
         {/* ── Right cluster: Segment toggle + CTA + Lang ─────────────── */}
         <div
-          style={{ display: "flex", alignItems: "center", gap: "24px" }}
+          style={{ alignItems: "center", gap: "24px" }}
           className="hidden md:flex"
         >
 
